@@ -1,16 +1,16 @@
 package web.Spring.Boot.service;
 
-
 import web.Spring.Boot.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
-    void save(User user);
+    User save(User user);
 
-    User findUserById(Integer id);
+    Optional<User> findUserById(Integer id);
 
-    void update(User user);
+    User update(User user, Integer id);
 
     void deleteUserById(Integer id);
 

@@ -1,6 +1,5 @@
 package web.Spring.Boot.model;
 
-
 import jakarta.persistence.*;
 
 @Entity

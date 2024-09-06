@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import web.Spring.Boot.model.User;
 import web.Spring.Boot.service.UserService;
 
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
@@ -30,7 +31,7 @@ public class UserController {
     }
     @PostMapping("/updateUser")
     public String update(@ModelAttribute("user") User user) {
-        userService.update(user);
+        userService.update(user, user.getId());
         return "redirect:/";
     }
 
@@ -43,8 +44,8 @@ public class UserController {
 
     @GetMapping("/showFormForUpdate/{id}")
         public String showFormForUpdate (@PathVariable(value = "id") Integer id, Model model){
-        User user = userService.findUserById(id);
-            model.addAttribute("user", user);
+        Optional <User> user = userService.findUserById(id);
+        model.addAttribute("user", user);
             return "updateUser";
         }
 
