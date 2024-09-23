@@ -1,57 +1,25 @@
 package web.Spring.Boot.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
 import web.Spring.Boot.model.User;
 import web.Spring.Boot.service.UserService;
+import web.Spring.Boot.service.UserServiceImpl;
 
-import java.util.Optional;
+import java.security.Principal;
 
 @Controller
-@RequestMapping("/")
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
 
-    @GetMapping(value = "/")
-    public String showAll(Model model) {
-        model.addAttribute("users", userService.getUsers());
-        return "users";
-    }
-
-    @PostMapping("/saveUser")
-    public String saveUser(@ModelAttribute("user") User user) {
-        userService.save(user);
-        return "redirect:/";
-    }
-    @PostMapping("/updateUser")
-    public String update(@ModelAttribute("user") User user) {
-        userService.update(user, user.getId());
-        return "redirect:/";
-    }
-
-    @GetMapping("/showNewUserForm")
-    public String showNewUserForm(Model model) {
-        User user = new User();
-        model.addAttribute("user", user);
-        return "new_user";
-    }
-
-    @GetMapping("/showFormForUpdate/{id}")
-        public String showFormForUpdate (@PathVariable(value = "id") Integer id, Model model){
-        Optional <User> user = userService.findUserById(id);
-        model.addAttribute("user", user);
-            return "updateUser";
-        }
-
-    @GetMapping("/deleteUser/{id}")
-    public String deleteUser(@PathVariable(value = "id") Integer id) {
-        this.userService.deleteUserById(id);
-        return "redirect:/";
+    @GetMapping("/user")
+    public String userInfo(Principal principal) {
+        User user = userServiceImpl.findByUsername(principal.getName());
+        return user.getUsername() + " " + user.getAge() + " " + user.getEmail();
     }
 }
